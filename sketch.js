@@ -1,16 +1,24 @@
 let bubbles =[]; 
+let backgroundR = 255;
+let backgroundG = 255;
+let backgroundB = 250;
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
 }
 
 function draw() {
-    background(255,255,250);
-    
+    background(backgroundR,backgroundG,backgroundB);
+    if((Math.floor(Math.random() * 2) + 2) % 2 == 0) {
+        append(bubbles, new Bubble(windowWidth/2,windowHeight/2));
+    }
     for (let i = 0; i < bubbles.length; i++){
         //remove when out of the screen
         if (bubbles[i].x < 0 || bubbles[i].x > windowWidth || bubbles[i].y < 0 || bubbles[i].y > windowHeight) {
-            bubbles.splice(i, 1)
+            let bubble = bubbles.splice(i, 1)
+            backgroundR = (backgroundR + bubble.r)/2
+            backgroundG = (backgroundG + bubble.g)/2
+            backgroundB = (backgroundB + bubble.b)/2
         }
         else {
             bubbles[i].show();
@@ -20,7 +28,7 @@ function draw() {
 }
 
 function mouseMoved(){
-    if((Math.floor(Math.random() * 3) + 3) % 2 == 0) {
+    if((Math.floor(Math.random() * 5) + 3) % 2 == 0) {
         append(bubbles, new Bubble(mouseX,mouseY));
     }
 }
