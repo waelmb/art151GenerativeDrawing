@@ -1,66 +1,50 @@
 // I suppose this project maintains the rythm of circiles
-let bubbles =[]; 
-let interval = 50;
+let origins = []; 
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    frameRate(1)
-    background(37,37,37);
-
-    //create the array of circles
-    let size = windowWidth+0;
-    let colors = [new color(37, 37, 37), new color(105, 48, 195), new color(100, 233, 233), new color(128, 255, 219)]
-    
-    while(size > interval) {
-        currColor = colors[round(random(0, 3))];
-        append(bubbles, new Bubble(windowWidth/2,windowHeight/2, size, currColor.r, currColor.g, currColor.b));
-        size -= interval + round(random(-20, 20))
-    }
-    print(bubbles)
+    frameRate(10)
+    background(37,37,37);    
+    append(origins, new Origin(windowWidth/2, windowHeight/2, windowWidth+200, 50))
 }
 
 function draw() {
-    /*shift the colors by 1*/
-    //get last color
-    let tempColor = null
-
-    //shift colors
-    for(i = 0; i < bubbles.length-1; i++){
-        if(tempColor != null) {
-            bubbles[i].r = tempColor.r
-            bubbles[i].g = tempColor.g
-            bubbles[i].b = tempColor.b
-            tempColor = new color(bubbles[i+1].r, bubbles[i+1].g, bubbles[i+1].b)
-        } else {
-            tempColor = new color(bubbles[i].r, bubbles[i].g, bubbles[i].b)
-            bubbles[i].r = bubbles[i+1].r
-            bubbles[i].g = bubbles[i+1].g
-            bubbles[i].b = bubbles[i+1].b
-        }
-        print('shifted ' + i)
-    }
-    print(bubbles)
-
-    //shift the first color
-    if(tempColor != null) {
-        bubbles[0].r = tempColor.r
-        bubbles[0].g = tempColor.g
-        bubbles[0].b = tempColor.b
-    }
-
-    //show the circles
-    for(i = 0; i < bubbles.length; i++){
-        bubbles[i].show()
-    }
-    //bubbles =[]
+    //show the origins
+    origins.forEach(element => element.show())
 }
 
-/*function mouseMoved(){
-    if((Math.floor(Math.random() * 5) + 3) % 2 == 0) {
-        append(bubbles, new Bubble(mouseX,mouseY));
-    }
-}*/
+function mousePressed(){
+    append(origins, new Origin(mouseX, mouseY, windowWidth/5, 50))
+}
 
+class Origin {
+    constructor(tempx, tempy, tempSize, tempInterval) {
+        this.x = tempx
+        this.y = tempy
+        this.size = tempSize
+        this.bubbles = []
+        this.colors = [new color(37, 37, 37), new color(105, 48, 195), new color(100, 233, 233), new color(128, 255, 219)]
+        this.interval = tempInterval;
+    }
+
+    create() {
+        this.bubbles = []
+        let currentSize = this.size
+        while(currentSize > this.interval) {
+            let currColor = this.colors[round(random(0, 3))];
+            append(this.bubbles, new Bubble(this.x, this.y , currentSize, currColor.r, currColor.g, currColor.b));
+            currentSize -= this.interval + round(random(-1*this.interval/2, this.interval/2))
+        }
+    }
+
+    show() {
+        this.create()
+        for(let i = 0; i < this.bubbles.length; i++){
+            this.bubbles[i].show()
+        }
+    }
+
+}
 class Bubble {
   constructor(tempx,tempy, tempSize, tempR, tempG, tempB){
     this.x = tempx;
