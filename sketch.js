@@ -1,50 +1,78 @@
+// I suppose this project maintains the rythm of circiles
 let bubbles =[]; 
-let backgroundR = 255;
-let backgroundG = 255;
-let backgroundB = 250;
+let interval = 50;
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
+    frameRate(1)
+    background(37,37,37);
+
+    //create the array of circles
+    let size = windowWidth+0;
+    let colors = [new color(37, 37, 37), new color(105, 48, 195), new color(100, 233, 233), new color(128, 255, 219)]
+    
+    while(size > interval) {
+        currColor = colors[round(random(0, 3))];
+        append(bubbles, new Bubble(windowWidth/2,windowHeight/2, size, currColor.r, currColor.g, currColor.b));
+        size -= interval + round(random(-20, 20))
+    }
+    print(bubbles)
 }
 
 function draw() {
-    background(backgroundR,backgroundG,backgroundB);
-    if((Math.floor(Math.random() * 2) + 2) % 2 == 0) {
-        append(bubbles, new Bubble(windowWidth/2,windowHeight/2));
+    /*shift the colors by 1*/
+    //get last color
+    let tempColor = null
+
+    //shift colors
+    for(i = 0; i < bubbles.length-1; i++){
+        if(tempColor != null) {
+            bubbles[i].r = tempColor.r
+            bubbles[i].g = tempColor.g
+            bubbles[i].b = tempColor.b
+            tempColor = new color(bubbles[i+1].r, bubbles[i+1].g, bubbles[i+1].b)
+        } else {
+            tempColor = new color(bubbles[i].r, bubbles[i].g, bubbles[i].b)
+            bubbles[i].r = bubbles[i+1].r
+            bubbles[i].g = bubbles[i+1].g
+            bubbles[i].b = bubbles[i+1].b
+        }
+        print('shifted ' + i)
     }
-    for (let i = 0; i < bubbles.length; i++){
-        //remove when out of the screen
-        if (bubbles[i].x < 0 || bubbles[i].x > windowWidth || bubbles[i].y < 0 || bubbles[i].y > windowHeight) {
-            let bubble = bubbles.splice(i, 1)
-            backgroundR = (backgroundR + bubble.r)/2
-            backgroundG = (backgroundG + bubble.g)/2
-            backgroundB = (backgroundB + bubble.b)/2
-        }
-        else {
-            bubbles[i].show();
-            bubbles[i].move();
-        }
-    }   
+    print(bubbles)
+
+    //shift the first color
+    if(tempColor != null) {
+        bubbles[0].r = tempColor.r
+        bubbles[0].g = tempColor.g
+        bubbles[0].b = tempColor.b
+    }
+
+    //show the circles
+    for(i = 0; i < bubbles.length; i++){
+        bubbles[i].show()
+    }
+    //bubbles =[]
 }
 
-function mouseMoved(){
+/*function mouseMoved(){
     if((Math.floor(Math.random() * 5) + 3) % 2 == 0) {
         append(bubbles, new Bubble(mouseX,mouseY));
     }
-}
+}*/
 
 class Bubble {
-	constructor(tempx,tempy){
-  	this.x = tempx;
+  constructor(tempx,tempy, tempSize, tempR, tempG, tempB){
+    this.x = tempx;
     this.y = tempy;
-    this.size = random(20,100);
-    this.r = random(255);
-    this.g = random(255);
-    this.b = random(255);
-    this.alpha = random(0, 255)
-    this.directionX = random(-10,10);
-    this.directionY = random(-10,10);
-  }
+    this.size = tempSize
+    this.r = tempR;
+    this.g = tempG;
+    this.b = tempB;
+    this.alpha = 255;
+    this.directionX = 0;
+    this.directionY = 0;
+}
   
   move(){
   	this.x += this.directionX
@@ -58,3 +86,11 @@ class Bubble {
   	ellipse(this.x,this.y,this.size,this.size);
   }
 }
+
+class color {
+    constructor(tempR, tempG, tempB){
+      this.r = tempR;
+      this.g = tempG;
+      this.b = tempB;
+    }
+  }
