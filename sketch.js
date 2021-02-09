@@ -86,10 +86,10 @@ function setup() {
     createCanvas(windowWidth, windowHeight)
     frameRate(10)
     background(37,37,37);    
-    append(origins, new Origin(windowWidth/2, windowHeight/2, windowWidth+200, 50, currColorSet))
+    append(origins, new Origin(windowWidth/2, windowHeight/2, windowWidth+400, 50, currColorSet))
     
     //Project description
-    msg = 'Project Circles, Colors, and More Circles, and colors\n'
+    msg = 'Project Circles, Colors, and More Circles, and Colors\n'
     msg+= '\n'
     msg+= 'The project follows a rythmic structure where colors within a single disk give a pulsing illusion. When a new disk is added, the color scheme of all previous disks are unified and the new disk introduces a new color scheme. The color schemes keep repeating in a cycle.\n'
     msg+= '\n'
